@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <Description>A thread-safe singleton HttpClient for Polymarket's OpenAPI integration.</Description>
+        <Description>Routes generated Polymarket requests to the appropriate API host.</Description>
         <Version Condition="'$(BUILD_VERSION)' == ''">4.0.0</Version>
         <Version Condition="'$(BUILD_VERSION)' != ''">$(BUILD_VERSION)</Version>
         <AssemblyName>Soenneker.Polymarket.HttpClients</AssemblyName>

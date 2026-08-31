@@ -9,11 +9,11 @@ using Soenneker.Utils.HttpClientCache.Abstract;
 
 namespace Soenneker.Polymarket.HttpClients;
 
-/// <inheritdoc cref="IPolymarketOpenApiHttpClient"/>
 public sealed class PolymarketOpenApiHttpClient : IPolymarketOpenApiHttpClient
 {
     private readonly IHttpClientCache _httpClientCache;
     private readonly IConfiguration _config;
+    private readonly string _cacheKey = $"{nameof(PolymarketOpenApiHttpClient)}:{Guid.NewGuid():N}";
 
     private const string _routingBaseUrl = "https://gamma-api.polymarket.com";
 
@@ -25,7 +25,7 @@ public sealed class PolymarketOpenApiHttpClient : IPolymarketOpenApiHttpClient
 
     public ValueTask<HttpClient> Get(CancellationToken cancellationToken = default)
     {
-        return _httpClientCache.Get(nameof(PolymarketOpenApiHttpClient), _config, static config =>
+        return _httpClientCache.Get(_cacheKey, _config, static config =>
         {
             return new HttpClientOptions
             {
@@ -37,11 +37,11 @@ public sealed class PolymarketOpenApiHttpClient : IPolymarketOpenApiHttpClient
 
     public void Dispose()
     {
-        _httpClientCache.RemoveSync(nameof(PolymarketOpenApiHttpClient));
+        _httpClientCache.RemoveSync(_cacheKey);
     }
 
     public ValueTask DisposeAsync()
     {
-        return _httpClientCache.Remove(nameof(PolymarketOpenApiHttpClient));
+        return _httpClientCache.Remove(_cacheKey);
     }
 }

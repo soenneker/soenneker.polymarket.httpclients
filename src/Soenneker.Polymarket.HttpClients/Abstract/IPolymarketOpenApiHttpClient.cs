@@ -6,14 +6,14 @@ using System.Threading;
 namespace Soenneker.Polymarket.HttpClients.Abstract;
 
 /// <summary>
-/// A .NET thread-safe singleton HttpClient for 
+/// Provides an HTTP client that routes generated Polymarket requests to the appropriate API host.
 /// </summary>
 public interface IPolymarketOpenApiHttpClient: IDisposable, IAsyncDisposable
 {
     /// <summary>
-    /// Returns the configured HTTP client used by the Polymarket OpenAPI HTTP Client.
+    /// Gets the cached routing client owned by this provider.
     /// </summary>
     /// <param name="cancellationToken">Token used to cancel the operation.</param>
-    /// <returns>A task whose result is the requested HTTP client.</returns>
+    /// <returns>The configured HTTP client.</returns>
     ValueTask<HttpClient> Get(CancellationToken cancellationToken = default);
 }

@@ -6,7 +6,7 @@ using Soenneker.Utils.HttpClientCache.Registrar;
 namespace Soenneker.Polymarket.HttpClients.Registrars;
 
 /// <summary>
-/// Registers the OpenAPI HttpClient wrapper for dependency injection.
+/// Registers the Polymarket multi-API HTTP client provider.
 /// </summary>
 public static class PolymarketOpenApiHttpClientRegistrar
 {
