@@ -9,6 +9,7 @@ using Soenneker.Utils.HttpClientCache.Abstract;
 
 namespace Soenneker.Polymarket.HttpClients;
 
+/// <inheritdoc cref="IPolymarketOpenApiHttpClient" />
 public sealed class PolymarketOpenApiHttpClient : IPolymarketOpenApiHttpClient
 {
     private readonly IHttpClientCache _httpClientCache;
