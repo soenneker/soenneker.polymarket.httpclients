@@ -9,7 +9,7 @@ namespace Soenneker.Polymarket.HttpClients;
 
 internal sealed class PolymarketRoutingHandler : DelegatingHandler
 {
-    private readonly IReadOnlyDictionary<string, Uri> _baseUrls;
+    private readonly Dictionary<string, Uri> _baseUrls;
 
     public PolymarketRoutingHandler(IConfiguration configuration)
     {
@@ -30,9 +30,9 @@ internal sealed class PolymarketRoutingHandler : DelegatingHandler
         Uri requestUri = request.RequestUri ?? throw new InvalidOperationException("The Polymarket request URI is missing.");
         string path = requestUri.AbsolutePath;
         int secondSlash = path.IndexOf('/', 1);
-        string prefix = secondSlash < 0 ? path[1..] : path[1..secondSlash];
+        ReadOnlySpan<char> prefix = secondSlash < 0 ? path.AsSpan(1) : path.AsSpan(1, secondSlash - 1);
 
-        if (!_baseUrls.TryGetValue(prefix, out Uri? baseUrl))
+        if (!_baseUrls.GetAlternateLookup<ReadOnlySpan<char>>().TryGetValue(prefix, out Uri? baseUrl))
             throw new InvalidOperationException($"Unknown Polymarket API prefix '{prefix}'.");
 
         string routedPath = secondSlash < 0 ? "/" : path[secondSlash..];
@@ -56,6 +56,6 @@ internal sealed class PolymarketRoutingHandler : DelegatingHandler
         if (string.IsNullOrEmpty(basePath) || basePath == "/")
             return requestPath;
 
-        return $"{basePath.TrimEnd('/')}/{requestPath.TrimStart('/')}";
+        return string.Concat(basePath.AsSpan().TrimEnd('/'), "/", requestPath.AsSpan().TrimStart('/'));
     }
 }
